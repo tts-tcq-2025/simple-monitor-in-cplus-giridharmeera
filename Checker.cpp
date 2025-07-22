@@ -15,10 +15,18 @@ bool isChargeRateOk(float chargeRate) {
 }
 
 void printBatteryStatus(float temperature, float soc, float chargeRate) {
-  cout 
-    << (isTemperatureOk(temperature) ? "" : "Temperature out of range!\n")
-    << (isSocOk(soc) ? "" : "State of Charge out of range!\n")
-    << (isChargeRateOk(chargeRate) ? "" : "Charge Rate out of range!\n");
+  struct Check {
+    bool ok;
+    const char* message;
+  } checks[] = {
+    { isTemperatureOk(temperature), "Temperature out of range!" },
+    { isSocOk(soc), "State of Charge out of range!" },
+    { isChargeRateOk(chargeRate), "Charge Rate out of range!" }
+  };
+
+  for (auto& check : checks) {
+    check.ok || (cout << check.message << "\n");
+  }
 }
 
 bool batteryIsOk(float temperature, float soc, float chargeRate) {
